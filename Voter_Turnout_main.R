@@ -10,7 +10,7 @@ NC_Voter_convert <- read_csv('NC_Voter_convert.csv')
 MIT_NC_Voter <- read_csv('MIT NC-cleaned-final.csv')
 
 
-MIT_NC_Slice <- MIT_NC_Voter %>% 
+MIT_NC_Pres <- MIT_NC_Voter %>% 
   filter(str_detect(office, 'US PRESIDENT'))
 
 
