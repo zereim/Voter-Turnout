@@ -36,17 +36,25 @@ total_pop <- get_acs(
   variables = 'B01003_001',   # Total Population
   year = 2023,
   state = 'North Carolina',
-  survey = 'acs5'
+  survey = 'acs1'
 )
+total_pop <- clean_names(total_pop)
 
-# Get 2023 county-level voting-age population
+# Get 2023 county-level voting-age population 
 voting_pop <- get_acs(
   geography = 'county',
   variables = 'B29001_001E',   # Voting-Age population
   year = 2023,
   state = 'North Carolina',
-  survey = 'acs5'
+  survey = 'acs1'
 )
+voting_pop <- clean_names(voting_pop)
+
+# join the two acs dataframes togther 
+acs_pop <- full_join(total_pop, voting_pop, by='name')
+
+acs_pop <- acs_pop %>% 
+  
 
 
 # Grab the 2023 data survey
