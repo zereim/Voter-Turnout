@@ -4,6 +4,7 @@ library(stringr)
 library(janitor)
 library(tidycensus)
 
+# 2024 General Election Statistics
 
 # load the voter csv file 
 NC_Voter_convert <- read_csv('NC_Voter_convert.csv')
@@ -25,24 +26,36 @@ Pres_Total <- MIT_NC_Pres_Clean %>%
   # sum votes per candidate
   summarise(total_votes = sum(votes, na.rm = TRUE))  
 
-
+# Add Census API Key
 census_api_key("090766422394c061e3e065a0d87f7cc5efed8d21", install = TRUE)
 
-# Example: Get 2020 county-level total population
-pop <- get_acs(
-  geography = "county",
-  variables = "B01003_001",   # total population
-  year = 2020,
-  survey = "acs5"
+
+# Get 2023 county-level total population
+total_pop <- get_acs(
+  geography = 'county',
+  variables = 'B01003_001',   # Total Population
+  year = 2023,
+  state = 'North Carolina',
+  survey = 'acs5'
 )
+
+# Get 2023 county-level voting-age population
+voting_pop <- get_acs(
+  geography = 'county',
+  variables = 'B29001_001E',   # Voting-Age population
+  year = 2023,
+  state = 'North Carolina',
+  survey = 'acs5'
+)
+
+
+# Grab the 2023 data survey
 
 
 # API key: 090766422394c061e3e065a0d87f7cc5efed8d21
 
 
-
-
-#df <- read_delim(
+# df <- read_delim(
 #  "ncvoter_Statewide.txt",      # your file path
 #  delim = "\t",                 # tab-delimited
 #  quote = "\"",                 # fields are quoted
@@ -50,11 +63,13 @@ pop <- get_acs(
 #  show_col_types = FALSE        # suppress verbose column type message
 #)
 
+
 # Clean column names
-df <- clean_names(df)
+# df <- clean_names(df)
+
 
 # View the structure
-glimpse(df)
+# glimpse(df)
 # give a glimpse 
 #head(NC_Voter_convert)
 #head(MIT_NC_Voter)
