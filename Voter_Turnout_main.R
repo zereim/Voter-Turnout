@@ -5,6 +5,9 @@ library(stringr)
 library(janitor)
 library(tidycensus)
 library(scales)
+library(ggpattern)
+library(forcats)
+
 
 # 2024 General Election Statistics
 
@@ -30,19 +33,52 @@ Pres_Total <- MIT_NC_Pres_Clean %>%
 
 # Plotting the Presidential Votes Total 
 # 
+#ggplot(
+#  data = Pres_Total, 
+#  aes(x = fct_reorder(candidate, total_votes, .desc = TRUE), 
+#      y = total_votes)) +
+#  geom_bar(stat = 'identity') +
+#  labs(x = "Candidate") +
+#  scale_y_continuous(
+#    breaks = seq(from = 0, 
+#                to = 3000000, 
+#                by = 250000),
+#    labels = scales::label_number(big.mark = ',')
+#    ) +
+#  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
 ggplot(
   data = Pres_Total, 
   aes(x = fct_reorder(candidate, total_votes, .desc = TRUE), 
-      y = total_votes)) +
-  geom_bar(stat = 'identity') +
-  labs(x = "Candidate") +
+      y = total_votes,
+      # ADDED: Map 'candidate' to the fill aesthetic for color differentiation
+      fill = candidate) 
+  ) +
+  geom_col() + # geom_col() is the shortcut for geom_bar(stat = 'identity')
+# AXIS AND LABELS
+# -------------------------------------------------------------
   scale_y_continuous(
-    breaks = seq(from = 0, 
-                to = 3000000, 
-                by = 250000),
+    breaks = seq(from = 0, to = 3000000, by = 250000),
     labels = scales::label_number(big.mark = ',')
-    ) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  ) +
+  labs(
+    title = "Total Votes by Candidate",
+    x = "Candidate",
+    y = "Total Votes",
+    fill = "Candidate" # Correct the legend title
+  ) +
+# THEME & ROTATION
+# -------------------------------------------------------------
+  theme_minimal() + # Use a clean theme
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none" # Hide the legend, as the x-axis already names them
+  )
+
+
+
+
 
 
 # Add Census API Key
