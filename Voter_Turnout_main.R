@@ -1,8 +1,10 @@
 library(tidyverse)
+library(ggplot2)
 library(readr)
 library(stringr)
 library(janitor)
 library(tidycensus)
+library(scales)
 
 # 2024 General Election Statistics
 
@@ -25,6 +27,23 @@ Pres_Total <- MIT_NC_Pres_Clean %>%
   group_by(candidate) %>%          
   # sum votes per candidate
   summarise(total_votes = sum(votes, na.rm = TRUE))  
+
+# Plotting the Presidential Votes Total 
+# 
+ggplot(
+  data = Pres_Total, 
+  aes(x = fct_reorder(candidate, total_votes, .desc = TRUE), 
+      y = total_votes)) +
+  geom_bar(stat = 'identity') +
+  labs(x = "Candidate") +
+  scale_y_continuous(
+    breaks = seq(from = 0, 
+                to = 3000000, 
+                by = 250000),
+    labels = scales::label_number(big.mark = ',')
+    ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 
 # Add Census API Key
 census_api_key("090766422394c061e3e065a0d87f7cc5efed8d21", install = TRUE)
@@ -53,8 +72,21 @@ voting_pop <- clean_names(voting_pop)
 # join the two acs dataframes togther 
 acs_pop <- full_join(total_pop, voting_pop, by='name')
 
-acs_pop <- acs_pop %>% 
+# rename columns for clarity 
+acs_pop_renamed <- acs_pop %>%
+  rename(
+    tot_pop = estimate.x,
+    tot_pop_moe = moe.x,
+    voting_age_pop =  estimate.y,
+    voting_age_pop_moe = moe.y,
+    geoid = geoid.x,
+    )
   
+# Removing the unused columns 
+acs_pop_trimmed <- acs_pop_renamed %>% 
+  select(-variable.x, -variable.y, -tot_pop_moe, -geoid.y)
+
+
 
 
 # Grab the 2023 data survey
