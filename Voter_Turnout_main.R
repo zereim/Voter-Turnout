@@ -31,22 +31,7 @@ Pres_Total <- MIT_NC_Pres_Clean %>%
   # sum votes per candidate
   summarise(total_votes = sum(votes, na.rm = TRUE))  
 
-# Plotting the Presidential Votes Total 
-# 
-#ggplot(
-#  data = Pres_Total, 
-#  aes(x = fct_reorder(candidate, total_votes, .desc = TRUE), 
-#      y = total_votes)) +
-#  geom_bar(stat = 'identity') +
-#  labs(x = "Candidate") +
-#  scale_y_continuous(
-#    breaks = seq(from = 0, 
-#                to = 3000000, 
-#                by = 250000),
-#    labels = scales::label_number(big.mark = ',')
-#    ) +
-#  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
+# making a plot of the total votes in north carolina 
 
 ggplot(
   data = Pres_Total, 
@@ -77,7 +62,9 @@ ggplot(
   )
 
 
-
+# Maybe if I put all the votes together for each county then I 
+# can export that file for use in other projects with NC voting data. 
+# This project can become the initial building block for further projects.
 
 
 
